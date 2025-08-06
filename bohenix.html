@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bohenix Solutions -  IoT and Green Energy Solutions for Kenya">
+  <title>Bohenix Solutions | Premium</title>
+  <!-- Mapbox GL CDN -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- React Toastify CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --primary-dark: #5B21B6;
+      --primary-light: #8B5CF6;
+      --secondary: #F59E0B;
+      --secondary-dark: #D97706;
+      --danger: #EF4444;
+      --success: #10B981;
+      --dark: #111827;
+      --darker: #0F172A;
+      --light: #F8FAFC;
+      --gray: #94A3B8;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius: 12px;
+      --border-radius-lg: 20px;
+    }
+
+    [data-theme="light"] {
+      --primary: #8B5CF6;
+      --primary-dark: #6D28D9;
+      --primary-light: #A78BFA;
+      --secondary: #F97316;
+      --secondary-dark: #EA580C;
+      --dark: #F3F4F6;
+      --darker: #E5E7EB;
+      --light: #1F2937;
+      --glass: rgba(0, 0, 0, 0.05);
+      --glass-border: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: var(--darker);
+      color: var(--light);
+      overflow-x: hidden;
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-light);
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 1.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+      color: var(--secondary);
+      animation: pulse 2s infinite;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: var(--transition);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--dark);
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--light);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-outline:hover {
+      background: var(--glass);
+      transform: translateY(-2px);
+    }
+
+    .btn-icon {
+      padding: 0.75rem;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Subscription Buttons */
+    .subscription-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+
+    .subscription-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--light);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .subscription-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .subscription-btn:hover:not(.active) {
+      background: var(--glass);
+      border-color: var(--primary-light);
+    }
+
+    /* Welcome Section */
+    .welcome {
+      padding: 8rem 0 4rem;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+
+    .welcome::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://thumbs.dreamstime.com/b/futuristic-city-street-illuminated-glowing-blue-lights-autonomous-vehicles-driving-smoothly-along-road-symbolizing-374050481.jpg') no-repeat center center/cover;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .welcome-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .welcome h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      line-height: 1.2;
+    }
+
+    .welcome p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .founder-badge {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.5rem 1rem;
+      background: var(--glass);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--glass-border);
+      font-size: 0.9rem;
+    }
+
+    .mission-vision {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .mission-card, .vision-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      padding: 2rem;
+      border-radius: var(--border-radius-lg);
+      transition: var(--transition);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .mission-card {
+      animation-delay: 0.3s;
+    }
+
+    .vision-card {
+      animation-delay: 0.6s;
+    }
+
+    .mission-card:hover, .vision-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .mission-card h2, .vision-card h2 {
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--darker);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      min-width: 180px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* About Section */
+    .about {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-image {
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .about-text h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--secondary);
+    }
+
+    .about-text p {
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .about-features {
+      margin-top: 2rem;
+    }
+
+    .about-feature-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-feature-icon {
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    /* Dashboard Section */
+    .dashboard {
+      padding: 6rem 0;
+      background: var(--darker);
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+
+    .section-header p {
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.8;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    #map {
+      height: 600px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--glass-border);
+    }
+
+    .map-container {
+      position: relative;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 1;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--border-radius);
+      padding: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .map-control-btn {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--light);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .map-control-btn:hover {
+      background: var(--primary);
+    }
+
+    /* Traffic Data Visualization */
+    .traffic-panel {
+      background: var(--dark);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--glass-border);
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .traffic-panel h3 {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .traffic-chart-container {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      background: var(--dark);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 1.25rem;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header h3 {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-body {
+      padding: 1.25rem;
+    }
+
+    #sos-button {
+      background: linear-gradient(90deg, var(--danger) 0%, #DC2626 100%);
+      color: white;
+      border: none;
+      padding: 1.25rem;
+      border-radius: var(--border-radius);
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    #sos-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .charging-stations-list {
+      list-style: none;
+    }
+
+    .station-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .station-item:last-child {
+      border-bottom: none;
+    }
+
+    .station-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .station-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+    }
+
+    .station-status {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-left: 0.5rem;
+    }
+
+    .status-available {
+      background: var(--success);
+    }
+
+    .status-occupied {
+      background: var(--danger);
+    }
+
+    .status-maintenance {
+      background: var(--secondary);
+    }
+
+    .chat-messages {
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .chat-message {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    .message-content {
+      background: var(--glass);
+      padding: 0.75rem 1rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+      max-width: 80%;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      margin-top: 0.25rem;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    #chat-input {
+      flex: 1;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      color: var(--light);
+    }
+
+    #chat-send {
+      background: var(--primary);
+      color: var(--light);
+      border: none;
+      border-radius: var(--border-radius);
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    #chat-send:hover {
+      background: var(--primary-dark);
+    }
+
+    /* User Profile */
+    .profile-container {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: var(--dark);
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-container.open {
+      right: 0;
+    }
+
+    .profile-header {
+      padding: 1.5rem;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-close {
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .profile-body {
+      padding: 1.5rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--light);
+      position: relative;
+    }
+
+    .profile-status {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--success);
+      border: 2px solid var(--dark);
+    }
+
+    .profile-name {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .profile-role {
+      text-align: center;
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .profile-details {
+      margin-bottom: 2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .detail-label {
+      opacity: 0.7;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* Notifications */
+    .notifications-container {
+      position: fixed;
+      top: 80px;
+      right: 2rem;
+      width: 350px;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: var(--dark);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--glass-border);
+      z-index: 1500;
+      transform: translateY(-20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .notifications-container.open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .notification-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notification-clear {
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .notification-list {
+      list-style: none;
+    }
+
+    .notification-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .notification-item:hover {
+      background: var(--glass);
+    }
+
+    .notification-icon {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-time {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem 0;
+      background: var(--dark);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--darker);
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--border-radius);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      opacity: 0.8;
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 6rem 0;
+      background: var(--darker);
+    }
+
+    .contact-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-info h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .contact-form {
+      background: var(--dark);
+      padding: 2rem;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--border-radius);
+      color: var(--light);
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      padding: 4rem 0 2rem;
+      position: relative;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-column h4 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-column h4::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--secondary);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--secondary);
+      padding-left: 5px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .social-icon:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .slide-in {
+      animation: slideIn 1s ease-out forwards;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .map-container {
+        order: 1;
+      }
+      
+      .sidebar {
+        order: 2;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .welcome h1 {
+        font-size: 2.8rem;
+      }
+      
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+      
+      .section-header h2 {
+        font-size: 2.2rem;
+      }
+      
+      .subscription-options {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+      
+      nav {
+        display: none;
+      }
+      
+      .welcome h1, .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .welcome p, .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .section-header h2 {
+        font-size: 2rem;
+      }
+      
+      .mission-vision {
+        grid-template-columns: 1fr;
+      }
+      
+      .stat-item {
+        min-width: 150px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .welcome h1, .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .section-header h2 {
+        font-size: 1.8rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .hero-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .stat-item {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .profile-container {
+        width: 100%;
+        right: -100%;
+      }
+      
+      .profile-container.open {
+        right: 0;
+      }
+      
+      .notifications-container {
+        width: 90%;
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon"><i class="fas fa-bolt"></i></span>
+      <span>Bohenix Solutions</span>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-buttons">
+      <button class="btn-icon" id="notifications-btn">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </button>
+      <button class="btn-icon" id="profile-btn">
+        <i class="fas fa-user"></i>
+      </button>
+      <button class="btn-outline" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Notifications Panel -->
+  <div class="notifications-container" id="notifications-panel">
+    <div class="notification-header">
+      <h4>Notifications</h4>
+      <button class="notification-clear">Clear All</button>
+    </div>
+    <ul class="notification-list">
+      <li class="notification-item">
+        <div class="notification-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="notification-content">
+          <p>New hazard reported on Highway A104</p>
+          <div class="notification-time">2 minutes ago</div>
+        </div>
+      </li>
+      <li class="notification-item">
+        <div class="notification-icon">
+          <i class="fas fa-charging-station"></i>
+        </div>
+        <div class="notification-content">
+          <p>Charging station 3 is now available</p>
+          <div class="notification-time">15 minutes ago</div>
+        </div>
+      </li>
+      <li class="notification-item">
+        <div class="notification-icon">
+          <i class="fas fa-car-crash"></i>
+        </div>
+        <div class="notification-content">
+          <p>Accident detected near your location</p>
+          <div class="notification-time">1 hour ago</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- User Profile Panel -->
+  <div class="profile-container" id="profile-panel">
+    <div class="profile-header">
+      <h3>My Profile</h3>
+      <button class="profile-close" id="profile-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="profile-body">
+      <div class="profile-avatar">
+        JD
+        <span class="profile-status"></span>
+      </div>
+      <h3 class="profile-name">Brian Nyarienya</h3>
+      <div class="profile-role">Fleet Manager</div>
+      
+      <div class="profile-details">
+        <div class="detail-item">
+          <span class="detail-label">Email:</span>
+          <span>nyarienyabrian05@bohenix.com</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Phone:</span>
+          <span>+254 7266 89 442</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Location:</span>
+          <span>Nairobi, Kenya</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Vehicles:</span>
+          <span>5 assigned</span>
+        </div>
+      </div>
+      
+      <div class="profile-actions">
+        <button class="btn btn-primary">
+          <i class="fas fa-cog"></i> Account Settings
+        </button>
+        <button class="btn btn-outline">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Section -->
+  <section id="home" class="welcome">
+    <div class="container">
+      <div class="welcome-content" data-aos="fade-up">
+        <h1>Empowering Kenya's Transportation Future</h1>
+        <p>Bohenix Solutions combines cutting-edge IoT technology with sustainable energy solutions to create safer roads and cleaner transportation across Kenya.</p>
+        
+        <div class="founder-badge" data-aos="fade-up" data-aos-delay="900">
+          Founded and developed by Brian Nyarienya
+        </div>
+        
+        <div class="mission-vision">
+          <div class="mission-card" data-aos="fade-up" data-aos-delay="300">
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>To revolutionize transportation in Kenya through innovative technology solutions that enhance safety, reduce environmental impact, and improve efficiency for all road users.</p>
+          </div>
+          
+          <div class="vision-card" data-aos="fade-up" data-aos-delay="600">
+            <h2><i class="fas fa-eye"></i> Our Vision</h2>
+            <p>A future where Kenyan roads are the safest in Africa, powered by clean energy and connected through intelligent systems that prevent accidents before they happen.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section id="about" class="hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>About Bohenix Solutions</h1>
+        <p>Founded in 2020 by Brian Nyarienya, Bohenix Solutions has quickly become a leader in intelligent transportation systems and green energy infrastructure in East Africa.</p>
+        <div class="hero-buttons">
+          <a href="#features" class="btn btn-primary">
+            <i class="fas fa-star"></i> Our Features
+          </a>
+          <a href="#contact" class="btn btn-outline">
+            <i class="fas fa-handshake"></i> Partner With Us
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item floating">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Team Members</div>
+          </div>
+          <div class="stat-item floating" style="animation-delay: 0.5s;">
+            <div class="stat-number">15</div>
+            <div class="stat-label">Cities Served</div>
+          </div>
+          <div class="stat-item floating" style="animation-delay: 1s;">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-image" data-aos="fade-right">
+          <img src="https://img.freepik.com/free-photo/developers-brainstorming-ideas-looking-code-computer-screens-asking-feedback-from-senior-developer-while-intern-joins-discussion-junior-programmers-collaborating-group-project_482257-41852.jpg?semt=ais_hybrid&w=740" alt="Bohenix Team">
+        </div>
+        <div class="about-text" data-aos="fade-left">
+          <h2>Our Story</h2>
+          <p>Bohenix Solutions was born out of a desire to solve Kenya's growing transportation challenges. Our founder Brian Nyarienya, along with a team of engineers and data scientists, recognized the potential of IoT and renewable energy to transform Africa's transportation sector.</p>
+          <p>Today, we partner with government agencies, fleet operators, and energy companies to deploy smart solutions that make roads safer and transportation more sustainable.</p>
+          
+          <div class="about-features">
+            <div class="about-feature-item">
+              <div class="about-feature-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div>
+                <h4>Certified Experts</h4>
+                <p>Our team holds certifications in IoT, renewable energy, and transportation safety</p>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <div class="about-feature-icon">
+                <i class="fas fa-award"></i>
+              </div>
+              <div>
+                <h4>Award Winning</h4>
+                <p>Recognized by the African Innovation Foundation for our groundbreaking work</p>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <div class="about-feature-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div>
+                <h4>Sustainable Focus</h4>
+                <p>Committed to reducing carbon emissions through smart technology</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Section -->
+  <section id="dashboard" class="dashboard">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2>Real-Time Fleet Dashboard</h2>
+        <p>Monitor your entire fleet, charging stations, and road conditions in real-time with our advanced telematics platform.</p>
+      </div>
+      
+      <div class="dashboard-grid">
+        <div class="map-container" data-aos="fade-right">
+          <div class="map-overlay">
+            <button class="map-control-btn" id="zoom-in">
+              <i class="fas fa-plus"></i>
+            </button>
+            <button class="map-control-btn" id="zoom-out">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button class="map-control-btn" id="locate-me">
+              <i class="fas fa-location-arrow"></i>
+            </button>
+          </div>
+          <div id="map"></div>
+          
+          <!-- Traffic Data Visualization -->
+          <div class="traffic-panel" data-aos="fade-up">
+            <h3><i class="fas fa-traffic-light"></i> Nairobi Traffic Flow</h3>
+            
+            <div class="subscription-options">
+              <button class="subscription-btn active" data-period="daily">Daily</button>
+              <button class="subscription-btn" data-period="monthly">Monthly</button>
+              <button class="subscription-btn" data-period="annual">Annual</button>
+            </div>
+            
+            <div class="traffic-chart-container">
+              <canvas id="trafficChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sidebar">
+          <div class="panel" data-aos="fade-left">
+            <div class="panel-header">
+              <h3><i class="fas fa-exclamation-triangle"></i> Emergency Controls</h3>
+            </div>
+            <div class="panel-body">
+              <button id="sos-button" class="pulse">
+                <i class="fas fa-bell"></i> Send SOS Alert
+              </button>
+            </div>
+          </div>
+          
+          <div class="panel" data-aos="fade-left" data-aos-delay="100">
+            <div class="panel-header">
+              <h3><i class="fas fa-charging-station"></i> Charging Stations</h3>
+              <span>3 nearby</span>
+            </div>
+            <div class="panel-body">
+              <ul class="charging-stations-list" id="charging-list">
+                <li class="station-item">
+                  <div class="station-info">
+                    <div class="station-icon">
+                      <i class="fas fa-plug"></i>
+                    </div>
+                    <div>
+                      <div>Nairobi West Station</div>
+                      <small>2.3 km away</small>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="station-status status-available"></span>
+                  </div>
+                </li>
+                <li class="station-item">
+                  <div class="station-info">
+                    <div class="station-icon">
+                      <i class="fas fa-plug"></i>
+                    </div>
+                    <div>
+                      <div>Kilimani Hub</div>
+                      <small>4.1 km away</small>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="station-status status-occupied"></span>
+                  </div>
+                </li>
+                <li class="station-item">
+                  <div class="station-info">
+                    <div class="station-icon">
+                      <i class="fas fa-plug"></i>
+                    </div>
+                    <div>
+                      <div>Thika Road Station</div>
+                      <small>8.7 km away</small>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="station-status status-available"></span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="panel" data-aos="fade-left" data-aos-delay="200">
+            <div class="panel-header">
+              <h3><i class="fas fa-comments"></i> Fleet Communication</h3>
+            </div>
+            <div class="panel-body">
+              <div class="chat-messages" id="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">FM</div>
+                  <div class="message-content">
+                    <div>Road hazard reported on Highway A104 near exit 12. All vehicles please avoid.</div>
+                    <div class="message-time">10:24 AM</div>
+                  </div>
+                </div>
+                <div class="chat-message">
+                  <div class="chat-avatar">D1</div>
+                  <div class="message-content">
+                    <div>Received. Rerouting now.</div>
+                    <div class="message-time">10:25 AM</div>
+                  </div>
+                </div>
+                <div class="chat-message">
+                  <div class="chat-avatar">CS</div>
+                  <div class="message-content">
+                    <div>Charging station at Kilimani Hub will be undergoing maintenance from 2-4 PM today.</div>
+                    <div class="message-time">9:45 AM</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input-container">
+                <input id="chat-input" type="text" placeholder="Type a message...">
+                <button id="chat-send">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2>Our Premium Features</h2>
+        <p>Discover how Bohenix Solutions is revolutionizing transportation and energy infrastructure in Kenya.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card" data-aos="fade-up">
+          <div class="feature-icon">
+            <i class="fas fa-car-crash"></i>
+          </div>
+          <h3>Collision Prevention</h3>
+          <p>Our Vehicle-to-Vehicle (V2V) communication system provides real-time alerts about potential collisions, dangerous road conditions, and emergency braking events up to 300 meters ahead.</p>
+        </div>
+        
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Smart Charging Network</h3>
+          <p>With 50+ solar-powered charging stations across Kenya, our network provides fast charging (0-80% in 30 minutes) with intelligent load balancing to prevent grid overload.</p>
+        </div>
+        
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Fleet Analytics</h3>
+          <p>Get detailed insights into driver behavior, energy consumption, maintenance needs, and route optimization with our AI-powered analytics dashboard.</p>
+        </div>
+        
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon">
+            <i class="fas fa-road"></i>
+          </div>
+          <h3>Road Condition Monitoring</h3>
+          <p>Our vehicle-mounted sensors detect and report potholes, flooding, and other hazards to both drivers and municipal authorities in real-time.</p>
+        </div>
+        
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3>Carbon Footprint Tracking</h3>
+          <p>Monitor your fleet's environmental impact with precise emissions tracking and receive automated sustainability reports for compliance and ESG reporting.</p>
+        </div>
+        
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Enterprise Security</h3>
+          <p>End-to-end encryption, blockchain-based data integrity, and multi-factor authentication ensure your fleet data remains secure from cyber threats.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2>Get In Touch</h2>
+        <p>Ready to transform your fleet operations? Contact our team today.</p>
+      </div>
+      
+      <div class="contact-container" data-aos="fade-up">
+        <div class="contact-info">
+          <h2>Contact Information</h2>
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div>
+              <h4>Headquarters</h4>
+              <p>Westlands Business District<br>Nairobi, Kenya</p>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div>
+              <h4>Phone</h4>
+              <p>+254 700 123 456<br>Mon-Fri, 8AM-5PM EAT</p>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+              <h4>Email</h4>
+              <p>info@bohenix.com<br>support@bohenix.com</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h4>Bohenix Solutions</h4>
+          <p>Pioneering IoT and green energy solutions for safer, smarter transportation in Kenya.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Fleet Management</a></li>
+            <li><a href="#">EV Charging Solutions</a></li>
+            <li><a href="#">Road Safety Analytics</a></li>
+            <li><a href="#">Custom IoT Development</a></li>
+            <li><a href="#">Energy Consulting</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>Contact Us</h4>
+          <ul class="footer-links">
+            <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+            <li><i class="fas fa-phone"></i> +254 700 123 456</li>
+            <li><i class="fas fa-envelope"></i> info@bohenix.com</li>
+            <li><i class="fas fa-clock"></i> Mon-Fri: 8AM - 5PM</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 Bohenix Solutions. All rights reserved. Founded by Brian Nyarienya</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    // Mapbox Initialization
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYm9oZW5peCIsImEiOiJjbHVtZ2V1eG4wMGJpMmpvNnF1b2Z5d2FzIn0.1234567890'; // Replace with your actual token
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [36.8219, -1.2921], // Nairobi, Kenya
+      zoom: 12,
+      pitch: 45,
+      bearing: -17.6
+    });
+
+    // Add 3D buildings and terrain
+    map.on('load', () => {
+      // Add terrain source
+      map.addSource('mapbox-dem', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        tileSize: 512,
+        maxzoom: 14
+      });
+      
+      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+      
+      // Add sky layer
+      map.addLayer({
+        'id': 'sky',
+        'type': 'sky',
+        'paint': {
+          'sky-type': 'atmosphere',
+          'sky-atmosphere-sun': [0.0, 0.0],
+          'sky-atmosphere-sun-intensity': 15
+        }
+      });
+      
+      // Add markers for charging stations
+      const chargingStations = [
+        { 
+          name: 'Nairobi West Station', 
+          status: 'Available', 
+          coordinates: [36.8119, -1.3021],
+          address: 'Mombasa Road, Nairobi'
+        },
+        { 
+          name: 'Kilimani Hub', 
+          status: 'Occupied', 
+          coordinates: [36.7919, -1.2821],
+          address: 'Argwings Kodhek Rd'
+        },
+        { 
+          name: 'Thika Road Station', 
+          status: 'Available', 
+          coordinates: [36.8519, -1.2721],
+          address: 'Thika Super Highway'
+        }
+      ];
+
+      chargingStations.forEach(station => {
+        const el = document.createElement('div');
+        el.className = 'marker';
+        el.innerHTML = `<i class="fas fa-charging-station ${station.status === 'Available' ? 'available' : 'occupied'}"></i>`;
+        
+        new mapboxgl.Marker(el)
+          .setLngLat(station.coordinates)
+          .setPopup(new mapboxgl.Popup({ offset: 25 })
+            .setHTML(`
+              <h3>${station.name}</h3>
+              <p>${station.address}</p>
+              <p>Status: <strong>${station.status}</strong></p>
+              <button class="popup-btn">Navigate</button>
+            `))
+          .addTo(map);
+      });
+      
+      // Add vehicle markers
+      const vehicles = [
+        { id: 'VH-001', coordinates: [36.8219, -1.2921], status: 'moving', speed: '45 km/h' },
+        { id: 'VH-002', coordinates: [36.8319, -1.2821], status: 'idle', speed: '0 km/h' },
+        { id: 'VH-003', coordinates: [36.8019, -1.2721], status: 'moving', speed: '60 km/h' }
+      ];
+      
+      vehicles.forEach(vehicle => {
+        const el = document.createElement('div');
+        el.className = 'marker vehicle';
+        el.innerHTML = `<i class="fas fa-car ${vehicle.status}"></i>`;
+        
+        new mapboxgl.Marker(el)
+          .setLngLat(vehicle.coordinates)
+          .setPopup(new mapboxgl.Popup({ offset: 25 })
+            .setHTML(`
+              <h3>Vehicle ${vehicle.id}</h3>
+              <p>Status: <strong>${vehicle.status}</strong></p>
+              <p>Speed: <strong>${vehicle.speed}</strong></p>
+              <button class="popup-btn">Track Vehicle</button>
+            `))
+          .addTo(map);
+      });
+    });
+
+    // Traffic Data
+    const trafficData = {
+      daily: {
+        labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM', '12AM'],
+        datasets: [
+          {
+            label: 'Thika Road',
+            data: [65, 85, 84, 72, 95, 60, 40],
+            borderColor: '#7C3AED',
+            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Mombasa Road',
+            data: [30, 45, 60, 50, 70, 40, 30],
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Waiyaki Way',
+            data: [50, 70, 75, 60, 80, 50, 35],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      monthly: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [
+          {
+            label: 'Thika Road',
+            data: [72, 85, 78, 90],
+            borderColor: '#7C3AED',
+            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Mombasa Road',
+            data: [45, 60, 55, 65],
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Waiyaki Way',
+            data: [65, 75, 70, 80],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      annual: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [
+          {
+            label: 'Thika Road',
+            data: [75, 82, 78, 85],
+            borderColor: '#7C3AED',
+            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Mombasa Road',
+            data: [50, 65, 60, 70],
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Waiyaki Way',
+            data: [70, 75, 72, 78],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      }
+    };
+
+    // Initialize Traffic Chart
+    const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+    let trafficChart = new Chart(trafficCtx, {
+      type: 'line',
+      data: trafficData.daily,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#F8FAFC'
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#F8FAFC'
+            }
+          },
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#F8FAFC'
+            }
+          }
+        }
+      }
+    });
+
+    // Subscription Button Functionality
+    const subscriptionBtns = document.querySelectorAll('.subscription-btn');
+    subscriptionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        subscriptionBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+        
+        // Get the period from data attribute
+        const period = btn.dataset.period;
+        
+        // Update chart data
+        trafficChart.data = trafficData[period];
+        trafficChart.update();
+      });
+    });
+
+    // Update traffic data randomly every 10 seconds
+    setInterval(() => {
+      trafficChart.data.datasets.forEach(dataset => {
+        dataset.data = dataset.data.map(value => {
+          const change = Math.floor(Math.random() * 20) - 10; // Random change between -10 and 10
+          return Math.max(10, Math.min(100, value + change)); // Keep between 10 and 100
+        });
+      });
+      trafficChart.update();
+    }, 10000);
+
+    // Map controls
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      map.zoomIn();
+    });
+    
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      map.zoomOut();
+    });
+    
+    document.getElementById('locate-me').addEventListener('click', () => {
+      navigator.geolocation.getCurrentPosition(position => {
+        map.flyTo({
+          center: [position.coords.longitude, position.coords.latitude],
+          zoom: 14
+        });
+        
+        new mapboxgl.Marker()
+          .setLngLat([position.coords.longitude, position.coords.latitude])
+          .setPopup(new mapboxgl.Popup().setHTML('<h3>Your Location</h3>'))
+          .addTo(map);
+      }, error => {
+        Toastify({
+          text: 'Unable to get your location: ' + error.message,
+          duration: 3000,
+          backgroundColor: '#EF4444'
+        }).showToast();
+      });
+    });
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      
+      // Update icon
+      themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+      
+      Toastify({
+        text: `Switched to ${isDark ? 'light' : 'dark'} mode`,
+        duration: 3000,
+        backgroundColor: '#7C3AED'
+      }).showToast();
+    });
+
+    // SOS Button
+    document.getElementById('sos-button').addEventListener('click', () => {
+      // Get current location
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        
+        // Show emergency alert
+        Toastify({
+          text: 'SOS Alert Sent! Emergency services notified of your location.',
+          duration: 5000,
+          backgroundColor: '#EF4444',
+          gravity: 'top',
+          position: 'center'
+        }).showToast();
+        
+        // In a real app, this would send to your backend
+        console.log('SOS sent with location:', { latitude, longitude });
+        
+        // Add emergency marker to map
+        new mapboxgl.Marker({ color: '#EF4444' })
+          .setLngLat([longitude, latitude])
+          .setPopup(new mapboxgl.Popup().setHTML('<h3>Emergency Location</h3>'))
+          .addTo(map);
+          
+        // Flash the marker
+        const markerElement = document.querySelector('.mapboxgl-marker:last-child');
+        if (markerElement) {
+          markerElement.style.animation = 'pulse 1s infinite';
+        }
+      }, error => {
+        Toastify({
+          text: 'Error getting location for SOS: ' + error.message,
+          duration: 3000,
+          backgroundColor: '#EF4444'
+        }).showToast();
+      });
+    });
+
+    // Chat Functionality
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    function addMessage(content, sender = 'You', time = new Date()) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      
+      const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      messageDiv.innerHTML = `
+        <div class="chat-avatar">${sender.charAt(0).toUpperCase()}</div>
+        <div class="message-content">
+          <div>${sender}: ${content}</div>
+          <div class="message-time">${timeString}</div>
+        </div>
+      `;
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    chatSend.addEventListener('click', () => {
+      const message = chatInput.value.trim();
+      if (message) {
+        addMessage(message);
+        chatInput.value = '';
+        
+        // Simulate response after 1-3 seconds
+        setTimeout(() => {
+          const responses = [
+            "Message received. Taking action now.",
+            "Thanks for the update.",
+            "Copy that.",
+            "Understood. Will advise the team.",
+            "Received. Please provide more details when possible."
+          ];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          addMessage(randomResponse, 'Fleet Manager');
+        }, 1000 + Math.random() * 2000);
+      }
+    });
+    
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        chatSend.click();
+      }
+    });
+
+    // Notifications Panel
+    const notificationsBtn = document.getElementById('notifications-btn');
+    const notificationsPanel = document.getElementById('notifications-panel');
+    
+    notificationsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notificationsPanel.classList.toggle('open');
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!notificationsPanel.contains(e.target)) {
+        notificationsPanel.classList.remove('open');
+      }
+    });
+    
+    // Clear notifications
+    document.querySelector('.notification-clear').addEventListener('click', () => {
+      document.querySelector('.notification-list').innerHTML = '<li class="notification-item empty">No notifications</li>';
+      document.querySelector('.notification-badge').style.display = 'none';
+    });
+
+    // Profile Panel
+    const profileBtn = document.getElementById('profile-btn');
+    const profilePanel = document.getElementById('profile-panel');
+    const profileClose = document.getElementById('profile-close');
+    
+    profileBtn.addEventListener('click', () => {
+      profilePanel.classList.add('open');
+    });
+    
+    profileClose.addEventListener('click', () => {
+      profilePanel.classList.remove('open');
+    });
+
+    // Contact Form Submission
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      Toastify({
+        text: 'Message sent successfully! We will contact you soon.',
+        duration: 5000,
+        backgroundColor: '#10B981',
+        gravity: 'top'
+      }).showToast();
+      
+      // Reset form
+      e.target.reset();
+    });
+
+    // Simulate real-time updates
+    setInterval(() => {
+      // Update charging station status randomly
+      const statuses = ['Available', 'Occupied', 'Maintenance'];
+      const stations = document.querySelectorAll('.station-status');
+      
+      stations.forEach(station => {
+        if (Math.random() > 0.7) { // 30% chance to change status
+          const newStatus = statuses[Math.floor(Math.random() * statuses.length)];
+          station.className = 'station-status';
+          
+          if (newStatus === 'Available') {
+            station.classList.add('status-available');
+          } else if (newStatus === 'Occupied') {
+            station.classList.add('status-occupied');
+          } else {
+            station.classList.add('status-maintenance');
+          }
+          
+          // Show notification if status changed to available
+          if (newStatus === 'Available') {
+            Toastify({
+              text: 'A charging station is now available',
+              duration: 3000,
+              backgroundColor: '#10B981'
+            }).showToast();
+          }
+        }
+      });
+      
+      // Simulate occasional hazard reports
+      if (Math.random() > 0.9) { // 10% chance per interval
+        const hazards = [
+          'Accident reported on Mombasa Road near ABC Mall',
+          'Heavy traffic detected on Thika Road',
+          'Road construction on Waiyaki Way',
+          'Flooding reported on Langata Road'
+        ];
+        
+        const randomHazard = hazards[Math.floor(Math.random() * hazards.length)];
+        addMessage(randomHazard, 'System Alert');
+        
+        Toastify({
+          text: 'New hazard reported in your area',
+          duration: 5000,
+          backgroundColor: '#F59E0B',
+          gravity: 'top'
+        }).showToast();
+      }
+    }, 10000); // Update every 10 seconds
+  </script>
+</body>
+</html>
